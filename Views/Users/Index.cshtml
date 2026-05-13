@@ -1,0 +1,129 @@
+@model IEnumerable<GestionCotisations.Web.ViewModels.UserViewModel>
+
+@{
+    ViewData["Title"] = "Gestion des Utilisateurs";
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        <i class="fas fa-exclamation-circle me-2"></i> @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">
+            <i class="fas fa-user-cog me-2 text-primary"></i> Utilisateurs
+        </h5>
+        <a asp-action="Create" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus me-1"></i> Nouvel utilisateur
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Utilisateur</th>
+                        <th>Email</th>
+                        <th>Rôle</th>
+                        <th>Date création</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="avatar-circle">
+                                        @user.Prenom.FirstOrDefault()@user.Nom.FirstOrDefault()
+                                    </div>
+                                    <div>
+                                        <div class="fw-semibold">@user.Prenom @user.Nom</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@user.Email</td>
+                            <td>
+                                @{
+                                    var roleClass = user.Role switch
+                                    {
+                                        "Admin" => "danger",
+                                        "Gestionnaire" => "warning",
+                                        _ => "info"
+                                    };
+                                }
+                                <span class="badge bg-@roleClass">@user.Role</span>
+                            </td>
+                            <td>@user.DateCreation.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                @if (user.EstActif)
+                                {
+                                    <span class="badge bg-success">Actif</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Inactif</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a asp-action="Edit" asp-route-id="@user.Id"
+                                       class="btn btn-outline-warning" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form asp-action="ToggleActive" asp-route-id="@user.Id"
+                                          method="post" style="display:inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit"
+                                                class="btn btn-outline-@(user.EstActif ? "secondary" : "success")"
+                                                title="@(user.EstActif ? "Désactiver" : "Activer")">
+                                            <i class="fas fa-@(user.EstActif ? "ban" : "check")"></i>
+                                        </button>
+                                    </form>
+                                    <form asp-action="Delete" asp-route-id="@user.Id"
+                                          method="post" style="display:inline"
+                                          onsubmit="return confirm('Supprimer cet utilisateur ?')">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-outline-danger" title="Supprimer">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .avatar-circle {
+            width: 35px; height: 35px;
+            background: linear-gradient(135deg, #1e3a5f, #2d6a9f);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+    </style>
+}

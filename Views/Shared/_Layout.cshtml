@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — Gestion Cotisations</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body { background-color: #f4f6f9; }
+
+        .sidebar {
+        width: 250px;
+        height: 100vh;
+        background: linear-gradient(180deg, #1e3a5f 0%, #2d6a9f 100%);
+        position: fixed;
+        top: 0; left: 0;
+        z-index: 100;
+        padding-top: 20px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255,255,255,0.2) transparent;
+        }
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+        }
+
+        .sidebar-brand {
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        .sidebar-brand i { font-size: 32px; }
+        .sidebar-brand h6 { margin-top: 8px; font-weight: 700; font-size: 14px; }
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.75);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 2px 10px;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+        .sidebar .nav-link i { width: 20px; margin-right: 10px; }
+        .topbar {
+            margin-left: 250px;
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            min-height: calc(100vh - 70px);
+        }
+        .nav-section-title {
+            color: rgba(255,255,255,0.4);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px 20px 5px;
+            margin-top: 10px;
+        }
+    </style>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+
+
+@if (User.Identity != null && User.Identity.IsAuthenticated)
+{
+    <script>
+        // Vérifie le nombre de notifications toutes les 30 secondes
+        async function updateNotifCount() {
+            try {
+                const response = await fetch('/Notifications/GetCount');
+                const data = await response.json();
+                const badge = document.getElementById('notif-count');
+                if (data.count > 0) {
+                    badge.textContent = data.count;
+                    badge.style.display = 'block';
+                } else {
+                    badge.style.display = 'none';
+                }
+            } catch (e) {}
+        }
+
+        updateNotifCount();
+        setInterval(updateNotifCount, 30000);
+    </script>
+}
+
+
+<body>
+
+@if (User.Identity != null && User.Identity.IsAuthenticated)
+{
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-hand-holding-usd text-white"></i>
+            <h6 class="text-white">Gestion Cotisations</h6>
+        </div>
+
+        <nav class="nav flex-column">
+    @if (User.IsInRole("Admin") || User.IsInRole("Gestionnaire"))
+    {
+        <div class="nav-section-title">Principal</div>
+        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")"
+           asp-controller="Dashboard" asp-action="Index">
+            <i class="fas fa-tachometer-alt"></i> Tableau de bord
+        </a>
+
+        <div class="nav-section-title">Gestion</div>
+        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Membres" ? "active" : "")"
+           asp-controller="Membres" asp-action="Index">
+            <i class="fas fa-users"></i> Membres
+        </a>
+        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cotisations" ? "active" : "")"
+           asp-controller="Cotisations" asp-action="Index">
+            <i class="fas fa-file-invoice-dollar"></i> Cotisations
+        </a>
+        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Paiements" ? "active" : "")"
+           asp-controller="Paiements" asp-action="Index">
+            <i class="fas fa-money-bill-wave"></i> Paiements
+        </a>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="nav-section-title">Administration</div>
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Users" ? "active" : "")"
+               asp-controller="Users" asp-action="Index">
+                <i class="fas fa-user-cog"></i> Utilisateurs
+            </a>
+        }
+
+        <div class="nav-section-title">Alertes</div>
+        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Notifications" ? "active" : "")"
+           asp-controller="Notifications" asp-action="Index">
+            <i class="fas fa-bell"></i> Notifications
+        </a>
+
+        <div class="nav-section-title">Exports</div>
+        <a class="nav-link" asp-controller="Export" asp-action="MembresPdf">
+            <i class="fas fa-file-pdf text-danger"></i> Membres PDF
+        </a>
+        <a class="nav-link" asp-controller="Export" asp-action="MembresCsv">
+            <i class="fas fa-file-csv text-success"></i> Membres CSV
+        </a>
+        <a class="nav-link" asp-controller="Export" asp-action="RapportExcel">
+            <i class="fas fa-file-excel text-success"></i> Rapport Excel
+        </a>
+        <a class="nav-link" asp-controller="Export" asp-action="RapportPdf">
+            <i class="fas fa-file-pdf text-danger"></i> Rapport PDF
+        </a>
+    }
+
+    @if (User.IsInRole("Membre"))
+    {
+        <div class="nav-section-title">Mon espace</div>
+        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")"
+           asp-controller="Dashboard" asp-action="Index">
+            <i class="fas fa-tachometer-alt"></i> Apercu
+        </a>
+        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cotisations" ? "active" : "")"
+           asp-controller="Cotisations" asp-action="MesCotisations">
+            <i class="fas fa-file-invoice-dollar"></i> Mes Cotisations
+        </a>
+        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Paiements" ? "active" : "")"
+           asp-controller="Paiements" asp-action="MesPaiements">
+            <i class="fas fa-money-bill-wave"></i> Mes Paiements
+        </a>
+
+        <div class="nav-section-title">Alertes</div>
+        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Notifications" ? "active" : "")"
+           asp-controller="Notifications" asp-action="Index">
+            <i class="fas fa-bell"></i> Notifications
+        </a>
+    }
+</nav>
+
+    </div>
+
+        <!-- Topbar -->
+    <div class="topbar">
+        <h5 class="mb-0 fw-bold text-dark">@ViewData["Title"]</h5>
+        <div class="d-flex align-items-center gap-3">
+
+            <!-- Cloche notifications -->
+            <a asp-controller="Notifications" asp-action="Index"
+            class="btn btn-outline-warning btn-sm position-relative">
+                <i class="fas fa-bell"></i>
+                <span id="notif-count" class="position-absolute top-0 start-100 translate-middle
+                    badge rounded-pill bg-danger" style="display:none;">0</span>
+            </a>
+
+            <span class="text-muted small">
+                <i class="fas fa-user-circle me-1"></i>
+                @User.Identity!.Name
+            </span>
+            <form asp-controller="Account" asp-action="Logout" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-outline-danger btn-sm">
+                    <i class="fas fa-sign-out-alt me-1"></i> Déconnexion
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Contenu -->
+    <div class="main-content">
+        @RenderBody()
+    </div>
+}
+else
+{
+    @RenderBody()
+}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

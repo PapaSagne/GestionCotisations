@@ -1,0 +1,70 @@
+@model GestionCotisations.Web.ViewModels.PaiementViewModel
+
+@{
+    ViewData["Title"] = "Nouveau Paiement";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold">
+                    <i class="fas fa-plus-circle me-2 text-warning"></i> Nouveau Paiement
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label asp-for="CotisationId" class="form-label fw-semibold"></label>
+                            <select asp-for="CotisationId" asp-items="Model.Cotisations" class="form-select">
+                                <option value="">-- Sélectionner une cotisation --</option>
+                            </select>
+                            <span asp-validation-for="CotisationId" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Montant" class="form-label fw-semibold"></label>
+                            <div class="input-group">
+                                <input asp-for="Montant" class="form-control" placeholder="0" />
+                                <span class="input-group-text">FCFA</span>
+                            </div>
+                            <span asp-validation-for="Montant" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="DatePaiement" class="form-label fw-semibold"></label>
+                            <input asp-for="DatePaiement" type="date" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Mode" class="form-label fw-semibold"></label>
+                            <select asp-for="Mode" class="form-select"
+                                    asp-items="Html.GetEnumSelectList<GestionCotisations.Web.Models.ModePaiement>()">
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Reference" class="form-label fw-semibold"></label>
+                            <input asp-for="Reference" class="form-control" placeholder="N° reçu ou transaction" />
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Remarque" class="form-label fw-semibold"></label>
+                            <textarea asp-for="Remarque" class="form-control" rows="2"
+                                      placeholder="Remarque optionnelle..."></textarea>
+                        </div>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-save me-2"></i> Enregistrer
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i> Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

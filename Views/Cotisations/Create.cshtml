@@ -1,0 +1,77 @@
+@model GestionCotisations.Web.ViewModels.CotisationViewModel
+
+@{
+    ViewData["Title"] = "Nouvelle Cotisation";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold">
+                    <i class="fas fa-plus-circle me-2 text-success"></i> Nouvelle Cotisation
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label asp-for="MembreId" class="form-label fw-semibold"></label>
+                            <select asp-for="MembreId" asp-items="Model.Membres" class="form-select">
+                                <option value="">-- Sélectionner un membre --</option>
+                            </select>
+                            <span asp-validation-for="MembreId" class="text-danger small"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Libelle" class="form-label fw-semibold"></label>
+                            <input asp-for="Libelle" class="form-control" placeholder="Ex: Cotisation annuelle 2025" />
+                            <span asp-validation-for="Libelle" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Montant" class="form-label fw-semibold"></label>
+                            <div class="input-group">
+                                <input asp-for="Montant" class="form-control" placeholder="0" />
+                                <span class="input-group-text">FCFA</span>
+                            </div>
+                            <span asp-validation-for="Montant" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Statut" class="form-label fw-semibold"></label>
+                            <select asp-for="Statut" class="form-select"
+                                    asp-items="Html.GetEnumSelectList<GestionCotisations.Web.Models.StatutCotisation>()">
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="DateDebut" class="form-label fw-semibold"></label>
+                            <input asp-for="DateDebut" type="date" class="form-control" />
+                            <span asp-validation-for="DateDebut" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="DateFin" class="form-label fw-semibold"></label>
+                            <input asp-for="DateFin" type="date" class="form-control" />
+                            <span asp-validation-for="DateFin" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="DateEcheance" class="form-label fw-semibold"></label>
+                            <input asp-for="DateEcheance" type="date" class="form-control" />
+                            <span asp-validation-for="DateEcheance" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save me-2"></i> Enregistrer
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i> Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

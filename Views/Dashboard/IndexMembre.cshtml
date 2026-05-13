@@ -1,0 +1,67 @@
+@model GestionCotisations.Web.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Mon Aperçu";
+}
+
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center p-4">
+                <i class="fas fa-file-invoice-dollar fa-3x text-primary mb-3"></i>
+                <h3 class="fw-bold">@Model.TotalCotisations</h3>
+                <p class="text-muted mb-0">Mes cotisations</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center p-4">
+                <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                <h3 class="fw-bold text-success">@Model.CotisationsPayees</h3>
+                <p class="text-muted mb-0">Payées</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center p-4">
+                <i class="fas fa-clock fa-3x text-warning mb-3"></i>
+                <h3 class="fw-bold text-warning">@Model.CotisationsEnAttente</h3>
+                <p class="text-muted mb-0">En attente</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center p-4">
+                <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+                <h3 class="fw-bold text-danger">@Model.CotisationsEnRetard</h3>
+                <p class="text-muted mb-0">En retard</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <h6 class="text-muted mb-3">Total attendu</h6>
+                <h3 class="fw-bold text-primary">@Model.TotalMontantAttendu.ToString("N0") FCFA</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <h6 class="text-muted mb-3">Total payé</h6>
+                <h3 class="fw-bold text-success">@Model.TotalMontantEncaisse.ToString("N0") FCFA</h3>
+                <div class="progress mt-2" style="height:10px;">
+                    <div class="progress-bar bg-success" style="width:@Model.TauxRecouvrement%"></div>
+                </div>
+                <small class="text-muted">@Model.TauxRecouvrement% payé</small>
+            </div>
+        </div>
+    </div>
+</div>

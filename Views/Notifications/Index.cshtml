@@ -1,0 +1,90 @@
+@model List<GestionCotisations.Web.Models.Notification>
+
+@{
+    ViewData["Title"] = "Mes Notifications";
+    var nonLues = Model.Count(n => !n.EstLue);
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">
+            <i class="fas fa-bell me-2 text-warning"></i>
+            Notifications
+            @if (nonLues > 0)
+            {
+                <span class="badge bg-danger ms-2">@nonLues</span>
+            }
+        </h5>
+        @if (nonLues > 0)
+        {
+            <form asp-action="MarquerToutesLues" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-check-double me-1"></i> Tout marquer comme lu
+                </button>
+            </form>
+        }
+    </div>
+
+    <div class="card-body p-0">
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
+                <p class="text-muted">Aucune notification</p>
+            </div>
+        }
+        else
+        {
+            <div class="list-group list-group-flush">
+                @foreach (var notif in Model)
+                {
+                    <div class="list-group-item list-group-item-action
+                                @(!notif.EstLue ? "bg-light border-start border-warning border-3" : "")
+                                p-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="d-flex gap-3 align-items-start">
+                                <div class="mt-1">
+                                    @if (!notif.EstLue)
+                                    {
+                                        <i class="fas fa-circle text-warning" style="font-size:8px"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-circle text-muted" style="font-size:8px"></i>
+                                    }
+                                </div>
+                                <div>
+                                    <p class="mb-1 @(!notif.EstLue ? "fw-semibold" : "text-muted")">
+                                        @notif.Message
+                                    </p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>
+                                        @notif.DateEnvoi.ToString("dd/MM/yyyy à HH:mm")
+                                    </small>
+                                </div>
+                            </div>
+                            @if (!notif.EstLue)
+                            {
+                                <form asp-action="MarquerLue" asp-route-id="@notif.Id" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-outline-warning btn-sm">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

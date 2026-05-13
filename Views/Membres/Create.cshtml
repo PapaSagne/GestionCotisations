@@ -1,0 +1,72 @@
+@model GestionCotisations.Web.ViewModels.MembreViewModel
+
+@{
+    ViewData["Title"] = "Nouveau Membre";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold">
+                    <i class="fas fa-user-plus me-2 text-primary"></i> Nouveau Membre
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="Nom" class="form-label fw-semibold"></label>
+                            <input asp-for="Nom" class="form-control" placeholder="Nom" />
+                            <span asp-validation-for="Nom" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Prenom" class="form-label fw-semibold"></label>
+                            <input asp-for="Prenom" class="form-control" placeholder="Prénom" />
+                            <span asp-validation-for="Prenom" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label fw-semibold"></label>
+                            <input asp-for="Email" class="form-control" placeholder="email@exemple.com" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Telephone" class="form-label fw-semibold"></label>
+                            <input asp-for="Telephone" class="form-control" placeholder="+221 77 000 00 00" />
+                            <span asp-validation-for="Telephone" class="text-danger small"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Adresse" class="form-label fw-semibold"></label>
+                            <textarea asp-for="Adresse" class="form-control" rows="2" placeholder="Adresse complète"></textarea>
+                            <span asp-validation-for="Adresse" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="DateInscription" class="form-label fw-semibold"></label>
+                            <input asp-for="DateInscription" type="date" class="form-control" />
+                            <span asp-validation-for="DateInscription" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end">
+                            <div class="form-check mb-2">
+                                <input asp-for="EstActif" class="form-check-input" />
+                                <label asp-for="EstActif" class="form-check-label fw-semibold">Membre actif</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i> Enregistrer
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i> Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

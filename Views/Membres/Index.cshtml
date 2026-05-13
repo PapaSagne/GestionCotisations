@@ -1,0 +1,140 @@
+@model IEnumerable<GestionCotisations.Web.Models.Membre>
+
+@{
+    ViewData["Title"] = "Gestion des Membres";
+}
+
+<!-- Message succès -->
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">
+            <i class="fas fa-users me-2 text-primary"></i> Liste des Membres
+        </h5>
+        <a asp-action="Create" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus me-1"></i> Nouveau membre
+        </a>
+    </div>
+
+    <div class="card-body">
+        <!-- Barre de recherche -->
+        <form method="get" class="mb-3">
+            <div class="input-group" style="max-width: 400px;">
+                <input type="text" name="search" value="@ViewData["Search"]"
+                       class="form-control" placeholder="Rechercher un membre..." />
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+                @if (!string.IsNullOrEmpty(ViewData["Search"]?.ToString()))
+                {
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="fas fa-times"></i>
+                    </a>
+                }
+            </div>
+        </form>
+
+        <!-- Tableau -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Nom complet</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Date inscription</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                                Aucun membre trouvé
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var membre in Model)
+                    {
+                        <tr>
+                            <td>@membre.Id</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle me-2">
+                                        @membre.Prenom[0]@membre.Nom[0]
+                                    </div>
+                                    <div>
+                                        <div class="fw-semibold">@membre.Prenom @membre.Nom</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@membre.Email</td>
+                            <td>@membre.Telephone</td>
+                            <td>@membre.DateInscription.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                @if (membre.EstActif)
+                                {
+                                    <span class="badge bg-success">Actif</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Inactif</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a asp-action="Details" asp-route-id="@membre.Id"
+                                       class="btn btn-outline-info" title="Détails">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@membre.Id"
+                                       class="btn btn-outline-warning" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <form asp-action="Delete" asp-route-id="@membre.Id"
+                                              method="post" style="display:inline"
+                                              onsubmit="return confirm('Supprimer ce membre ?')">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-outline-danger" title="Supprimer">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .avatar-circle {
+            width: 35px; height: 35px;
+            background: linear-gradient(135deg, #1e3a5f, #2d6a9f);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+    </style>
+}

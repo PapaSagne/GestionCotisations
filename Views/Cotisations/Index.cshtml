@@ -1,0 +1,126 @@
+@model IEnumerable<GestionCotisations.Web.Models.Cotisation>
+@using GestionCotisations.Web.Models
+
+@{
+    ViewData["Title"] = "Gestion des Cotisations";
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">
+            <i class="fas fa-file-invoice-dollar me-2 text-success"></i> Liste des Cotisations
+        </h5>
+        <a asp-action="Create" class="btn btn-success btn-sm">
+            <i class="fas fa-plus me-1"></i> Nouvelle cotisation
+        </a>
+    </div>
+
+    <div class="card-body">
+        <!-- Filtres -->
+        <form method="get" class="row g-2 mb-3">
+            <div class="col-md-5">
+                <input type="text" name="search" value="@ViewData["Search"]"
+                       class="form-control" placeholder="Rechercher..." />
+            </div>
+            <div class="col-md-4">
+                <select name="statut" class="form-select">
+                    <option value="">-- Tous les statuts --</option>
+                    @foreach (var s in Enum.GetValues<StatutCotisation>())
+                    {
+                        <option value="@s" selected="@(ViewData["Statut"]?.ToString() == s.ToString())">@s</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-outline-primary flex-fill">
+                    <i class="fas fa-filter me-1"></i> Filtrer
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="fas fa-times"></i>
+                </a>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Membre</th>
+                        <th>Libellé</th>
+                        <th>Montant</th>
+                        <th>Échéance</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                                Aucune cotisation trouvée
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var c in Model)
+                    {
+                        <tr>
+                            <td>@c.Id</td>
+                            <td>
+                                <span class="fw-semibold">@c.Membre?.Prenom @c.Membre?.Nom</span>
+                            </td>
+                            <td>@c.Libelle</td>
+                            <td class="fw-bold">@c.Montant.ToString("N0") FCFA</td>
+                            <td>@c.DateEcheance.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                @{
+                                    var badgeClass = c.Statut switch
+                                    {
+                                        StatutCotisation.Payee => "success",
+                                        StatutCotisation.EnRetard => "danger",
+                                        StatutCotisation.Annulee => "secondary",
+                                        _ => "warning"
+                                    };
+                                }
+                                <span class="badge bg-@badgeClass">@c.Statut</span>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a asp-action="Details" asp-route-id="@c.Id"
+                                       class="btn btn-outline-info" title="Détails">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@c.Id"
+                                       class="btn btn-outline-warning" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <form asp-action="Delete" asp-route-id="@c.Id"
+                                              method="post" style="display:inline"
+                                              onsubmit="return confirm('Supprimer cette cotisation ?')">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-outline-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

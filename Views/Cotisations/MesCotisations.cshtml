@@ -1,0 +1,73 @@
+@model IEnumerable<GestionCotisations.Web.Models.Cotisation>
+@using GestionCotisations.Web.Models
+
+@{
+    ViewData["Title"] = "Mes Cotisations";
+}
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle me-2"></i> @ViewBag.Message
+    </div>
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3">
+        <h5 class="mb-0 fw-bold">
+            <i class="fas fa-file-invoice-dollar me-2 text-success"></i> Mes Cotisations
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Libellé</th>
+                        <th>Montant</th>
+                        <th>Échéance</th>
+                        <th>Payé</th>
+                        <th>Reste</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">
+                                <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                                Aucune cotisation trouvée
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var c in Model)
+                    {
+                        var paye = c.Paiements.Sum(p => p.Montant);
+                        var reste = c.Montant - paye;
+                        var pct = c.Montant > 0 ? (int)((paye / c.Montant) * 100) : 0;
+                        var badgeClass = c.Statut switch {
+                            StatutCotisation.Payee => "success",
+                            StatutCotisation.EnRetard => "danger",
+                            StatutCotisation.Annulee => "secondary",
+                            _ => "warning"
+                        };
+                        <tr>
+                            <td class="fw-semibold">@c.Libelle</td>
+                            <td>@c.Montant.ToString("N0") FCFA</td>
+                            <td>@c.DateEcheance.ToString("dd/MM/yyyy")</td>
+                            <td class="text-success fw-bold">@paye.ToString("N0") FCFA</td>
+                            <td class="text-danger fw-bold">@reste.ToString("N0") FCFA</td>
+                            <td>
+                                <span class="badge bg-@badgeClass">@c.Statut</span>
+                                <div class="progress mt-1" style="height:5px; width:80px;">
+                                    <div class="progress-bar bg-@badgeClass" style="width:@pct%"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
