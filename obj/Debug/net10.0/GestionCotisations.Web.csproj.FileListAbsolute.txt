@@ -83,8 +83,6 @@ C:\Users\LENOVO X27O\Documents\GestionCotisations\GestionCotisations.Web\obj\Deb
 C:\Users\LENOVO X27O\Documents\GestionCotisations\GestionCotisations.Web\obj\Debug\net10.0\compressed\7riwhju101-{0}-muycvpuwrr-muycvpuwrr.gz
 C:\Users\LENOVO X27O\Documents\GestionCotisations\GestionCotisations.Web\obj\Debug\net10.0\compressed\x7vl36n32t-{0}-87fc7y1x7t-87fc7y1x7t.gz
 C:\Users\LENOVO X27O\Documents\GestionCotisations\GestionCotisations.Web\obj\Debug\net10.0\compressed\69jpu5b2ez-{0}-mlv21k5csn-mlv21k5csn.gz
-C:\Users\LENOVO X27O\Documents\GestionCotisations\GestionCotisations.Web\obj\Debug\net10.0\compressed\qp1tvrx2c4-{0}-skr34mkn10-skr34mkn10.gz
-C:\Users\LENOVO X27O\Documents\GestionCotisations\GestionCotisations.Web\obj\Debug\net10.0\compressed\g61e4bp04c-{0}-skr34mkn10-skr34mkn10.gz
 C:\Users\LENOVO X27O\Documents\GestionCotisations\GestionCotisations.Web\obj\Debug\net10.0\staticwebassets.build.json
 C:\Users\LENOVO X27O\Documents\GestionCotisations\GestionCotisations.Web\obj\Debug\net10.0\staticwebassets.build.json.cache
 C:\Users\LENOVO X27O\Documents\GestionCotisations\GestionCotisations.Web\obj\Debug\net10.0\staticwebassets.development.json
@@ -302,3 +300,6 @@ C:\Users\LENOVO X27O\Documents\GestionCotisations\GestionCotisations.Web\bin\Deb
 C:\Users\LENOVO X27O\Documents\GestionCotisations\GestionCotisations.Web\bin\Debug\net10.0\runtimes\win-arm64\native\libSkiaSharp.dll
 C:\Users\LENOVO X27O\Documents\GestionCotisations\GestionCotisations.Web\bin\Debug\net10.0\runtimes\win-x64\native\libSkiaSharp.dll
 C:\Users\LENOVO X27O\Documents\GestionCotisations\GestionCotisations.Web\bin\Debug\net10.0\runtimes\win-x86\native\libSkiaSharp.dll
+C:\Users\LENOVO X27O\Documents\GestionCotisations\GestionCotisations.Web\obj\Debug\net10.0\GestionCotisations.Web.sourcelink.json
+C:\Users\LENOVO X27O\Documents\GestionCotisations\GestionCotisations.Web\obj\Debug\net10.0\compressed\qp1tvrx2c4-{0}-w1q0ds6ufn-w1q0ds6ufn.gz
+C:\Users\LENOVO X27O\Documents\GestionCotisations\GestionCotisations.Web\obj\Debug\net10.0\compressed\g61e4bp04c-{0}-w1q0ds6ufn-w1q0ds6ufn.gz

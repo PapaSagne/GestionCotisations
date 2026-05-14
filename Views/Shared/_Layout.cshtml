@@ -6,78 +6,375 @@
     <title>@ViewData["Title"] — Gestion Cotisations</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    
     <style>
-        body { background-color: #f4f6f9; }
 
-        .sidebar {
-        width: 250px;
+
+select option {
+    background: #1a1a1a !important;
+    color: #e0e0e0 !important;
+}
+
+select.form-select option,
+select.form-control option {
+    background: #1a1a1a !important;
+    color: #e0e0e0 !important;
+}
+
+.form-select {
+    background-color: rgba(255,255,255,0.04) !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23D4AF37' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+    border: 1px solid rgba(212,175,55,0.25) !important;
+    color: #e0e0e0 !important;
+}
+
+.form-select:focus {
+    background-color: rgba(212,175,55,0.05) !important;
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 3px rgba(212,175,55,0.1) !important;
+    color: #ffffff !important;
+}
+
+
+    :root {
+        --gold: #D4AF37;
+        --gold-light: #F5D76E;
+        --gold-dark: #B8860B;
+        --noir: #0a0a0a;
+        --noir-card: #141414;
+        --noir-sidebar: #111111;
+        --noir-hover: #1e1a0e;
+        --text-gold: rgba(212, 175, 55, 0.85);
+        --text-muted: rgba(255,255,255,0.4);
+        --border-gold: rgba(212, 175, 55, 0.2);
+    }
+
+    * { font-family: 'Segoe UI', Arial, sans-serif; }
+
+    body {
+        background: #0d0d0d;
+        color: #e0e0e0;
+    }
+
+    .sidebar {
+        width: 260px;
         height: 100vh;
-        background: linear-gradient(180deg, #1e3a5f 0%, #2d6a9f 100%);
+        background: linear-gradient(180deg, #111111 0%, #0d0d0d 100%);
+        border-right: 1px solid var(--border-gold);
         position: fixed;
         top: 0; left: 0;
         z-index: 100;
-        padding-top: 20px;
+        padding-top: 0;
         overflow-y: auto;
         scrollbar-width: thin;
-        scrollbar-color: rgba(255,255,255,0.2) transparent;
-        }
-        .sidebar::-webkit-scrollbar {
-            width: 4px;
-        }
-        .sidebar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .sidebar::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.2);
-            border-radius: 4px;
-        }
+        scrollbar-color: rgba(212,175,55,0.2) transparent;
+    }
 
-        .sidebar-brand {
-            color: white;
-            text-align: center;
-            padding: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 20px;
-        }
-        .sidebar-brand i { font-size: 32px; }
-        .sidebar-brand h6 { margin-top: 8px; font-weight: 700; font-size: 14px; }
-        .sidebar .nav-link {
-            color: rgba(255,255,255,0.75);
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin: 2px 10px;
-            transition: all 0.2s;
-            font-size: 14px;
-        }
-        .sidebar .nav-link:hover,
-        .sidebar .nav-link.active {
-            background: rgba(255,255,255,0.15);
-            color: white;
-        }
-        .sidebar .nav-link i { width: 20px; margin-right: 10px; }
-        .topbar {
-            margin-left: 250px;
-            background: white;
-            padding: 15px 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .main-content {
-            margin-left: 250px;
-            padding: 30px;
-            min-height: calc(100vh - 70px);
-        }
-        .nav-section-title {
-            color: rgba(255,255,255,0.4);
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 10px 20px 5px;
-            margin-top: 10px;
-        }
-    </style>
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb {
+        background: rgba(212,175,55,0.2);
+        border-radius: 4px;
+    }
+
+    .sidebar-brand {
+    <div class="sidebar-brand">
+        <div class="brand-icon">
+            <i class="fas fa-coins"></i>
+        </div>
+        <h6>Gestion Cotisations</h6>
+        <p>Espace de gestion</p>
+    </div>
+    }
+
+    .sidebar-brand .brand-icon {
+        width: 54px; height: 54px;
+        background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold-dark));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+        box-shadow: 0 0 20px rgba(212,175,55,0.3);
+    }
+
+    .sidebar-brand .brand-icon i { font-size: 22px; color: #0a0a0a; }
+
+    .sidebar-brand h6 {
+        color: var(--gold);
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin: 0;
+    }
+
+    .sidebar-brand p {
+        color: var(--text-muted);
+        font-size: 11px;
+        margin: 4px 0 0;
+    }
+
+    .sidebar .nav-link {
+        color: rgba(255,255,255,0.55);
+        padding: 11px 18px;
+        border-radius: 8px;
+        margin: 2px 10px;
+        transition: all 0.25s;
+        font-size: 13.5px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .sidebar .nav-link i {
+        width: 18px;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    .sidebar .nav-link:hover {
+        background: var(--noir-hover);
+        color: var(--gold);
+        border-left: 2px solid var(--gold);
+        padding-left: 16px;
+    }
+
+    .sidebar .nav-link.active {
+        background: linear-gradient(90deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05));
+        color: var(--gold);
+        border-left: 3px solid var(--gold);
+        padding-left: 15px;
+        font-weight: 600;
+    }
+
+    .nav-section-title {
+        color: rgba(212,175,55,0.35);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        padding: 14px 20px 5px;
+        margin-top: 4px;
+    }
+
+    /* ── Topbar ── */
+    .topbar {
+        margin-left: 260px;
+        background: linear-gradient(90deg, #111111, #141414);
+        border-bottom: 1px solid var(--border-gold);
+        padding: 14px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    }
+
+    .topbar h5 {
+        color: var(--gold);
+        font-weight: 700;
+        font-size: 17px;
+        letter-spacing: 0.5px;
+        margin: 0;
+    }
+
+    .main-content {
+        margin-left: 260px;
+        padding: 28px;
+        min-height: calc(100vh - 65px);
+    }
+
+    /* ── Cards ── */
+    .card {
+        background: var(--noir-card) !important;
+        border: 1px solid var(--border-gold) !important;
+        border-radius: 12px !important;
+    }
+
+    .card-header {
+        background: linear-gradient(90deg, rgba(212,175,55,0.06), transparent) !important;
+        border-bottom: 1px solid var(--border-gold) !important;
+        color: var(--gold) !important;
+    }
+
+    /* ── Tables ── */
+    .table {
+        color: #d0d0d0 !important;
+    }
+
+    .table-light {
+        background: rgba(212,175,55,0.06) !important;
+        color: var(--gold) !important;
+    }
+
+    .table-light th {
+        background: rgba(212,175,55,0.08) !important;
+        color: var(--gold) !important;
+        border-color: var(--border-gold) !important;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    .table td, .table th {
+        border-color: rgba(212,175,55,0.1) !important;
+    }
+
+    .table-hover tbody tr:hover {
+        background: rgba(212,175,55,0.04) !important;
+        color: #ffffff !important;
+    }
+
+    /* ── Formulaires ── */
+    .form-control, .form-select {
+        background: rgba(255,255,255,0.04) !important;
+        border: 1px solid rgba(212,175,55,0.25) !important;
+        color: #e0e0e0 !important;
+        border-radius: 8px !important;
+    }
+
+    .form-control::placeholder { color: rgba(255,255,255,0.2) !important; }
+
+    .form-control:focus, .form-select:focus {
+        background: rgba(212,175,55,0.05) !important;
+        border-color: var(--gold) !important;
+        box-shadow: 0 0 0 3px rgba(212,175,55,0.1) !important;
+        color: #ffffff !important;
+    }
+
+    .form-label {
+        color: var(--text-gold) !important;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .form-check-input:checked {
+        background-color: var(--gold) !important;
+        border-color: var(--gold) !important;
+    }
+
+    /* ── Boutons ── */
+    .btn-primary {
+        background: linear-gradient(135deg, var(--gold-dark), var(--gold)) !important;
+        border: none !important;
+        color: #0a0a0a !important;
+        font-weight: 700 !important;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, var(--gold), var(--gold-light)) !important;
+        box-shadow: 0 4px 15px rgba(212,175,55,0.3) !important;
+        color: #0a0a0a !important;
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #1a4a1a, #2d8a2d) !important;
+        border: 1px solid rgba(45,138,45,0.5) !important;
+        color: #90ee90 !important;
+        font-weight: 600 !important;
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, #7a5a00, var(--gold-dark)) !important;
+        border: none !important;
+        color: var(--gold-light) !important;
+        font-weight: 600 !important;
+    }
+
+    .btn-danger, .btn-outline-danger {
+        border-color: rgba(220,53,69,0.5) !important;
+        color: #ff6b6b !important;
+    }
+
+    .btn-danger:hover { background: rgba(220,53,69,0.2) !important; }
+
+    .btn-outline-primary {
+        border-color: var(--border-gold) !important;
+        color: var(--gold) !important;
+    }
+
+    .btn-outline-primary:hover {
+        background: rgba(212,175,55,0.1) !important;
+        color: var(--gold) !important;
+    }
+
+    .btn-outline-secondary {
+        border-color: rgba(255,255,255,0.15) !important;
+        color: rgba(255,255,255,0.5) !important;
+    }
+
+    .btn-outline-warning {
+        border-color: rgba(212,175,55,0.4) !important;
+        color: var(--gold) !important;
+    }
+
+    .btn-outline-warning:hover {
+        background: rgba(212,175,55,0.1) !important;
+    }
+
+    .btn-outline-info {
+        border-color: rgba(13,202,240,0.4) !important;
+        color: #6dd8f5 !important;
+    }
+
+    .badge.bg-success { background: rgba(40,167,69,0.2) !important; color: #6ddf8a !important; border: 1px solid rgba(40,167,69,0.3) !important; }
+    .badge.bg-warning { background: rgba(212,175,55,0.15) !important; color: var(--gold) !important; border: 1px solid var(--border-gold) !important; }
+    .badge.bg-danger  { background: rgba(220,53,69,0.15) !important; color: #ff6b6b !important; border: 1px solid rgba(220,53,69,0.3) !important; }
+    .badge.bg-secondary { background: rgba(108,117,125,0.2) !important; color: #aaa !important; border: 1px solid rgba(108,117,125,0.3) !important; }
+    .badge.bg-info { background: rgba(13,202,240,0.15) !important; color: #6dd8f5 !important; border: 1px solid rgba(13,202,240,0.3) !important; }
+    .badge.bg-primary { background: rgba(212,175,55,0.15) !important; color: var(--gold) !important; border: 1px solid var(--border-gold) !important; }
+
+    .alert-success {
+        background: rgba(40,167,69,0.1) !important;
+        border: 1px solid rgba(40,167,69,0.3) !important;
+        color: #6ddf8a !important;
+    }
+
+    .alert-danger {
+        background: rgba(220,53,69,0.1) !important;
+        border: 1px solid rgba(220,53,69,0.3) !important;
+        color: #ff6b6b !important;
+    }
+
+    .alert-warning {
+        background: rgba(212,175,55,0.1) !important;
+        border: 1px solid var(--border-gold) !important;
+        color: var(--gold) !important;
+    }
+
+    .input-group-text {
+        background: rgba(212,175,55,0.08) !important;
+        border: 1px solid rgba(212,175,55,0.25) !important;
+        color: var(--gold) !important;
+    }
+
+    .progress {
+        background: rgba(255,255,255,0.05) !important;
+    }
+
+    .progress-bar.bg-success {
+        background: linear-gradient(90deg, #1a4a1a, #2d8a2d) !important;
+    }
+
+    .list-group-item {
+        background: var(--noir-card) !important;
+        border-color: var(--border-gold) !important;
+        color: #d0d0d0 !important;
+    }
+
+    .list-group-item.bg-light {
+        background: rgba(212,175,55,0.05) !important;
+    }
+
+    .text-muted { color: rgba(255,255,255,0.35) !important; }
+    .fw-bold { color: inherit; }
+
+    /* ── Scrollbar global ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0d0d0d; }
+    ::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.2); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(212,175,55,0.4); }
+</style>
+
     @await RenderSectionAsync("Styles", required: false)
 </head>
 
